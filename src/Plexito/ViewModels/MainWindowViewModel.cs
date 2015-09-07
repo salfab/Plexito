@@ -34,8 +34,16 @@ namespace Plexito.ViewModels
         private void UpdatePlayerState(object state)
         {
             var status = _api.PlayBack.GetStatus(_player, _servers);
-            this.Title = status.Video.Title;
-            this.Parent = status.Video.GrandParentTitle;
+            if (status != null)
+            {
+                this.Title = status.Video.Title;
+                this.Parent = status.Video.GrandParentTitle;
+            }
+            else
+            {
+                this.Title = string.Empty;
+                this.Parent = string.Empty;
+            }
         }
 
         public string Title

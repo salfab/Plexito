@@ -28,33 +28,41 @@ namespace SandboxConsole.Services
                     .Execute("GetStatus_jint(device, plexServers)")
                     .GetCompletionValue()
                     .ToObject();
-            
-            foreach (var status in ((object[])statuses).Cast<string>())
-            {
-                var document = XDocument.Parse(status);
 
-                var videoElement = document.Element("MediaContainer").Element("Video");
-                if (videoElement.Element("Player").Attribute("machineIdentifier").Value == device.ClientIdentifier)
+            if (statuses != null)
+            {
+                foreach (var status in ((object[])statuses).Cast<string>())
                 {
-                    // Making a lightweight version right now, because in the future, we expect statuses to return directly a single JSON object.
-                    return new DeviceStatus()
-                           {
-                               Video = new Video {
-                                           Duration = long.Parse(videoElement.Attribute("duration").Value),
-                                           ViewOffset = long.Parse(videoElement.Attribute("viewOffset").Value),
-                                           Title = videoElement.Attribute("title").Value,
-                                           Summary = videoElement.Attribute("summary").Value,
-                                           GrandParentTitle = videoElement.Attribute("grandparentTitle").Value,
-                                           Thumb = videoElement.Attribute("thumb").Value
-                                       },
-                                Player = new Player {
-                                             Title = videoElement.Element("Player").Attribute("title").Value,
-                                             MachineIdentifier = videoElement.Element("Player").Attribute("machineIdentifier").Value,
-                                             Platform = videoElement.Element("Player").Attribute("platform").Value,
-                                             Product = videoElement.Element("Player").Attribute("product").Value,
-                                             State = videoElement.Element("Player").Attribute("state").Value
-                                         }
-                           };
+                    var document = XDocument.Parse(status);
+
+                    var videoElement = document.Element("MediaContainer").Element("Video");
+
+                    // Only videos are supported now.
+                    if (videoElement != null)
+                    {
+                        if (videoElement.Element("Player").Attribute("machineIdentifier").Value == device.ClientIdentifier)
+                        {
+                            // Making a lightweight version right now, because in the future, we expect statuses to return directly a single JSON object.
+                            return new DeviceStatus()
+                                   {
+                                       Video = new Video {
+                                                             Duration = long.Parse(videoElement.Attribute("duration").Value),
+                                                             //ViewOffset = long.Parse(videoElement.Attribute("viewOffset").Value),
+                                                             Title = videoElement.Attribute("title").Value,
+                                                             Summary = videoElement.Attribute("summary").Value,
+                                                             GrandParentTitle = videoElement.Attribute("grandparentTitle").Value,
+                                                             Thumb = videoElement.Attribute("thumb").Value
+                                                         },
+                                       Player = new Player {
+                                                               Title = videoElement.Element("Player").Attribute("title").Value,
+                                                               MachineIdentifier = videoElement.Element("Player").Attribute("machineIdentifier").Value,
+                                                               Platform = videoElement.Element("Player").Attribute("platform").Value,
+                                                               Product = videoElement.Element("Player").Attribute("product").Value,
+                                                               State = videoElement.Element("Player").Attribute("state").Value
+                                                           }
+                                   };
+                        }
+                    }
                 }
             }
 
