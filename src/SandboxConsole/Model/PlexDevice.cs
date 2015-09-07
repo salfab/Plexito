@@ -5,7 +5,7 @@ namespace SandboxConsole.Model
 
     public class PlexDevice
     {
-        private IList<string> connectionUris;
+        private readonly IList<string> connectionUris;
 
         public string Name { get; set; }
 
@@ -55,7 +55,7 @@ namespace SandboxConsole.Model
         }
 
         public void AddConnectionUri(string uri)
-        {            
+        {
             connectionUris.Add(uri);
         }
     }
