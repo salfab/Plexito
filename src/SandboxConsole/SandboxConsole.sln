@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SandboxConsole", "SandboxConsole.csproj", "{3F3AC32E-24D7-4AFD-992A-56A23FF004D8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plexito.JavaScriptLogic", "..\Plexito.JavaScriptLogic\Plexito.JavaScriptLogic.csproj", "{C3A91FEE-487D-415E-9619-4B35BE391E26}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plexito", "..\Plexito\Plexito.csproj", "{E1494DBE-AFBE-4380-985A-79B1D1B92F7B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3F3AC32E-24D7-4AFD-992A-56A23FF004D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F3AC32E-24D7-4AFD-992A-56A23FF004D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F3AC32E-24D7-4AFD-992A-56A23FF004D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F3AC32E-24D7-4AFD-992A-56A23FF004D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3A91FEE-487D-415E-9619-4B35BE391E26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3A91FEE-487D-415E-9619-4B35BE391E26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3A91FEE-487D-415E-9619-4B35BE391E26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3A91FEE-487D-415E-9619-4B35BE391E26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1494DBE-AFBE-4380-985A-79B1D1B92F7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1494DBE-AFBE-4380-985A-79B1D1B92F7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1494DBE-AFBE-4380-985A-79B1D1B92F7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1494DBE-AFBE-4380-985A-79B1D1B92F7B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

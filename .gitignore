@@ -1,0 +1,8 @@
+src/SandboxConsole/bin
+src/SandboxConsole/obj
+src/SandboxConsole/packages
+src/Plexito.JavaScriptLogic/bin
+src/Plexito.JavaScriptLogic/obj
+**/*.suo
+src/Plexito/obj
+src/Plexito/bin
