@@ -1,19 +1,27 @@
 ﻿<Window x:Class="Plexito.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="70" Width="300" ResizeMode="NoResize" WindowStyle="None" Background="#FF292929" MouseLeftButtonDown="WindowMouseLeftButtonDown">
+        Title="MainWindow" Height="70" Width="300"
+        ResizeMode="NoResize"
+        WindowStyle="None"
+        Background="#FF292929"
+        MouseLeftButtonDown="WindowMouseLeftButtonDown"
+        xmlns:local="clr-namespace:Plexito.ViewModels">
+    <Window.DataContext>
+        <local:MainWindowViewModel />
+    </Window.DataContext>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
-            <ColumnDefinition Width="80"/>
+            <ColumnDefinition Width="80" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="20"/>
-            <RowDefinition Height="15"/>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="20" />
+            <RowDefinition Height="15" />
         </Grid.RowDefinitions>
-        <TextBlock Foreground="LightSlateGray" Text="Wollt Ihr das Bett in Flammen sehen?" Grid.Row="1"/>
-        <TextBlock Foreground="LightSlateGray" Text="Rammstein" Grid.Row="2"/>
+        <TextBlock Foreground="LightSlateGray" Text="{Binding Title}" Grid.Row="1" />
+        <TextBlock Foreground="LightSlateGray" Text="{Binding Parent}" Grid.Row="2" />
         <StackPanel  Orientation="Horizontal">
             <Button FontFamily="Segoe UI Symbol" Content="" />
             <Button FontFamily="Segoe UI Symbol" Content="" />
