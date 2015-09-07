@@ -1,24 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using SandboxConsole.Services;
+using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SandboxConsole
 {
-    using JimBobBennett.JimLib.Network;
-    using JimBobBennett.JimLib.Xamarin.Net45.Images;
-    using JimBobBennett.JimLib.Xamarin.Network;
-    using JimBobBennett.JimLib.Xamarin.Timers;
-    using JimBobBennett.RestAndRelaxForPlex.Caches;
-    using JimBobBennett.RestAndRelaxForPlex.Connection;
-    using JimBobBennett.RestAndRelaxForPlex.PlexObjects;
-    using Jint;
-    using SandboxConsole.Model;
-    using SandboxConsole.Services;
-    using System.Collections.Specialized;
-    using System.Runtime.CompilerServices;
-
     internal class Program
     {
         private static void Main(string[] args)

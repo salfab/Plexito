@@ -1,20 +1,13 @@
 using Jint;
 using Newtonsoft.Json.Linq;
 using Plexito.JavaScriptLogic.Stubs;
+using SandboxConsole.Model;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace SandboxConsole.Services
 {
-    using SandboxConsole.Model;
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.Configuration;
-    using System.Net;
-    using System.Text;
-    using System.Xml.Linq;
-
     public class PlexBinding
     {
         private Engine _scripts;
