@@ -23,9 +23,9 @@
         <TextBlock Foreground="LightSlateGray" Text="{Binding Title}" Grid.Row="1" />
         <TextBlock Foreground="LightSlateGray" Text="{Binding Parent}" Grid.Row="2" />
         <StackPanel  Orientation="Horizontal">
-            <Button FontFamily="Segoe UI Symbol" Content="" />
-            <Button FontFamily="Segoe UI Symbol" Content="" />
-            <Button FontFamily="Segoe UI Symbol" Content="" />
+            <Button FontFamily="Segoe UI Symbol" Content="" Command="{Binding SkipPreviousCommand}" />
+            <Button FontFamily="Segoe UI Symbol" Content="" Command="{Binding PauseCommand}" />
+            <Button FontFamily="Segoe UI Symbol" Content="" Command="{Binding SkipNextCommand}" />
         </StackPanel>
         <Image Grid.RowSpan="3" Grid.Column="1"></Image>
     </Grid>

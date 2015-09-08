@@ -29,6 +29,25 @@ namespace Plexito.ViewModels
             playerStateUpdateTimer = new Timer(UpdatePlayerState, null, 0, 1000);
             Title = "Title";
             Parent = "Parent";
+
+            SkipNextCommand = new DelegateCommand(OnSkipNext);
+            SkipPreviousCommand = new DelegateCommand(OnSkipPrevious);
+            PauseCommand = new DelegateCommand(OnPause);
+        }
+
+        private void OnPause()
+        {
+            _api.PlayBack.Pause(_player);
+        }
+
+        private void OnSkipPrevious()
+        {
+            _api.PlayBack.SkipPrevious(_player);
+        }
+
+        private void OnSkipNext()
+        {
+            _api.PlayBack.SkipNext(_player);
         }
 
         private void UpdatePlayerState(object state)
@@ -95,5 +114,9 @@ namespace Plexito.ViewModels
             var handler = PropertyChanged;
             if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        public DelegateCommand PauseCommand { get; set; }
+        public DelegateCommand SkipNextCommand { get; set; }
+        public DelegateCommand SkipPreviousCommand { get; set; }
     }
 }
