@@ -8,10 +8,9 @@ using System.Windows;
 
 namespace Plexito
 {
+    using SandboxConsole.Services;
     using System.Threading;
     using System.Windows.Navigation;
-
-    using SandboxConsole.Services;
 
     /// <summary>
     /// Interaction logic for App.xaml
@@ -22,7 +21,7 @@ namespace Plexito
 
         public App()
         {
-            var plexApi = new PlexBinding();
+            var plexApi = new PlexBinding(ConfigurationManager.AppSettings["username"], ConfigurationManager.AppSettings["password"]);
             var device = plexApi.GetDevices()["Hubert"];
             this.plexMediaKeysProxy = new PlexMediaKeysProxy(plexApi);
             this.plexMediaKeysProxy.SetDevice(device);

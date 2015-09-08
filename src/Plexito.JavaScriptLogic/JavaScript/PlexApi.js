@@ -1,6 +1,7 @@
-﻿function GetDevices(xhr) {
+﻿function GetDevices(username, password, xhr) {
     xhr.open("GET", "https://plex.tv/devices.xml", false);
-    xhr.setRequestHeader("Authorization", "Basic xxxxxxxxxxx=");
+    base64credentials = Base64.encode(username + ":" + password);
+    xhr.setRequestHeader("Authorization", "Basic " + base64credentials);
     xhr.setRequestHeader("Content-Type", "text/xml");
     xhr.send();
     return xhr.responseXML;

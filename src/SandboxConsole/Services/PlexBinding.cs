@@ -5,11 +5,14 @@ using SandboxConsole.Model;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Security;
 
 namespace SandboxConsole.Services
 {
     public class PlexBinding
     {
+        private readonly string _username;
+        private readonly string _password;
         private Engine _scripts;
 
         public IReadOnlyDictionary<string, PlexDevice> GetDevices()
@@ -17,7 +20,9 @@ namespace SandboxConsole.Services
             IDictionary<string, PlexDevice> devices = new Dictionary<string, PlexDevice>();
 
             var devicesJson = (string)_scripts
-                .Execute("GetDevices_jint()")
+                .SetValue("username", _username)
+                .SetValue("password", _password)
+                .Execute("GetDevices_jint(username, password)")
                 .GetCompletionValue()
                 .ToObject();
 
@@ -97,8 +102,10 @@ namespace SandboxConsole.Services
 
         public PlaybackApiBinding PlayBack { get; set; }
 
-        public PlexBinding()
+        public PlexBinding(string username, string password)
         {
+            _username = username;
+            _password = password;
             this.PlayBack = new PlaybackApiBinding(Plexito.JavaScriptLogic.Scripts.PlaybackApi);
             _scripts = new Engine(cfg => cfg.AllowClr(typeof(XMLHttpRequest).Assembly)).Execute(Plexito.JavaScriptLogic.Scripts.PlexApi);
         }

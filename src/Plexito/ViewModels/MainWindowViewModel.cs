@@ -22,7 +22,7 @@ namespace Plexito.ViewModels
 
         public MainWindowViewModel()
         {
-            _api = new PlexBinding();
+            _api = new PlexBinding(ConfigurationManager.AppSettings["username"], ConfigurationManager.AppSettings["password"]);
             var devices = _api.GetDevices();
             _player = devices[ConfigurationManager.AppSettings["playerName"]];
             _servers = devices.Values.Where(d => d.Provides.Contains("server"));

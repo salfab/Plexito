@@ -73,6 +73,15 @@
                 {
                     result += reader.ReadToEnd();
                 }
+
+                resourceName = "Plexito.JavaScriptLogic.JavaScript.Base64.js";
+
+                using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    result += reader.ReadToEnd();
+                }
+
                 return result;
             }
         }
