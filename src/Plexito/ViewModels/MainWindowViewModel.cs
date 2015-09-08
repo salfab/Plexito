@@ -22,6 +22,7 @@ namespace Plexito.ViewModels
 
         public MainWindowViewModel()
         {
+            // We should use a service locator or an IoC container, just to make sure we are using the same instance of PlexBinding throughout the app.
             _api = new PlexBinding(ConfigurationManager.AppSettings["username"], ConfigurationManager.AppSettings["password"]);
             var devices = _api.GetDevices();
             _player = devices[ConfigurationManager.AppSettings["playerName"]];
@@ -37,6 +38,7 @@ namespace Plexito.ViewModels
 
         private void OnPause()
         {
+            // we could have an intermediary service here to basically "manage" the playback, but since it does nothing else than calling the plex api, it seems like a bit of overkill.
             _api.PlayBack.Pause(_player);
         }
 
