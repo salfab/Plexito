@@ -20,23 +20,18 @@ namespace SandboxConsole.Services
 
         public DeviceStatus GetStatus(PlexDevice device, IEnumerable<PlexDevice> plexServers)
         {
-            var statuses =
+            var status =
                 this.scripts.SetValue("device", device)
                     .SetValue("plexServers", plexServers.ToArray())
                     .Execute("GetStatusJson_jint(device, plexServers)")
                     .GetCompletionValue()
                     .ToObject();
 
-            if (statuses != null)
+            if (status != null)
             {
-                var jsonStatuses = ((object[])statuses).Cast<string>().Select(JObject.Parse);
+                var deviceStatusJson = JObject.Parse((string)status);
 
                 // we're supposed to have only one here, except if one device has more than one valid connection URL, in which case the same device will have replied anyways (and that scenario shouldn't happen anyways because one of the two should fail.)
-                var deviceStatusJson = jsonStatuses.First(o =>
-                {
-                    var jToken = o["Video"] ?? (o["Photo"] ?? o["Track"]);
-                    return jToken["Player"]["@attributes"]["machineIdentifier"].Value<string>() == device.ClientIdentifier;
-                });
 
                 var deviceStatus = new DeviceStatus();
 

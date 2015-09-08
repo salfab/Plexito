@@ -22,10 +22,10 @@ function skipPrevious_jint(device) {
     playbackAction(device, "skipPrevious", xhr);
 }
 
-function GetStatus_jint(device, plexServers) {
+function GetStatuses_jint(plexServers) {
     var stubs = importNamespace("Plexito.JavaScriptLogic.Stubs");
     var xhr = new stubs.XMLHttpRequest();
-    var statusItems = GetStatus(device, plexServers, xhr);
+    var statusItems = GetStatuses(plexServers, xhr);
 
     // Ideally, we should return a json instead of an XML, it would be easier to work with in JavaScript
     // However, JInt is very limited and doesn't allow us to use the DOM parser usually included in a browser.
@@ -39,13 +39,26 @@ function GetStatus_jint(device, plexServers) {
     return statusItems;
 }
 
-function GetStatusJson_jint(device, plexServers) {
+function GetStatusesJson_jint(plexServers) {
     var xmlItems = [];
-    var statusItems = GetStatus_jint(device, plexServers);
+    var statusItems = GetStatuses_jint(plexServers);
     for (index = 0; index < statusItems.length; index++) {
         var xmlDoc = new REXMLLite(statusItems[index]);
         xmlItems.push(JSON.stringify(xmlToJson(xmlDoc.rootElement.childElements[0])));
     }
 
     return xmlItems;
+}
+
+function GetStatusJson_jint(device, plexServers) {
+    var statusItems = GetStatuses_jint(plexServers);
+    for (index = 0; index < statusItems.length; index++) {
+        var xmlDoc = new REXMLLite(statusItems[index]);
+        var json = xmlToJson(xmlDoc.rootElement.childElements[0]);
+        var deviceToQuery = device.ClientIdentifier;
+        if (json.Photo.Player['@attributes'].machineIdentifier === deviceToQuery) {
+            return JSON.stringify(json);
+        }
+    }
+    return null;
 }

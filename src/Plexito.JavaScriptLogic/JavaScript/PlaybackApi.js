@@ -13,20 +13,20 @@ function playbackAction(device, action, xhr) {
     xmlDocument = xhr.responseXML;
 }
 
-function GetStatus(device, plexServers) {
+function GetStatuses(plexServers) {
     var xhr = new XMLHttpRequest();
 
     var xmlItems = [];
-    var statusItems = GetStatus(device, plexServers, xhr);
+    var statusItems = GetStatuses(plexServers, xhr);
     for (index = 0; index < statusItems.length; index++) {
         xmlItems.push(statusItems.documentElement.outerHTML);
     }
 
     return xmlItems;
 
-    function GetStatusJson(device, plexServers) {
+    function GetStatusesJson(plexServers) {
         var xmlItems = [];
-        var statusItems = GetStatus(device, plexServers);
+        var statusItems = GetStatuses(plexServers);
         for (index = 0; index < statusItems.length; index++) {
             xmlItems.push(xmlToJson(statusItems));
         }
@@ -35,9 +35,8 @@ function GetStatus(device, plexServers) {
     }
 }
 
-function GetStatus(device, plexServers, xhr) {
+function GetStatuses(plexServers, xhr) {
     // query all the uris for all servers and keep only the results matching the specified device
-    var deviceToQuers = device.Name;
     var xmlItems = [];
     for (index = 0; index < plexServers.length; index++) {
         for (cindex = 0; cindex < plexServers[index].ConnectionUris.length; cindex++) {
