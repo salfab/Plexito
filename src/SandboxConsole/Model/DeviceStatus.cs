@@ -5,7 +5,5 @@ namespace SandboxConsole.Model
     public class DeviceStatus
     {
         public Video Video { get; set; }
-
-        public Player Player { get; set; }
     }
 }

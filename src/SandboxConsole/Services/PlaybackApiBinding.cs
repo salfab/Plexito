@@ -1,14 +1,13 @@
+using Newtonsoft.Json.Linq;
+
 namespace SandboxConsole.Services
 {
+    using Jint;
+    using Plexito.JavaScriptLogic.Stubs;
+    using SandboxConsole.Model;
     using System.Collections.Generic;
     using System.Linq;
     using System.Xml.Linq;
-
-    using Jint;
-
-    using Plexito.JavaScriptLogic.Stubs;
-
-    using SandboxConsole.Model;
 
     public class PlaybackApiBinding
     {
@@ -21,49 +20,25 @@ namespace SandboxConsole.Services
 
         public DeviceStatus GetStatus(PlexDevice device, IEnumerable<PlexDevice> plexServers)
         {
-
             var statuses =
                 this.scripts.SetValue("device", device)
                     .SetValue("plexServers", plexServers.ToArray())
-                    .Execute("GetStatus_jint(device, plexServers)")
+                    .Execute("GetStatusJson_jint(device, plexServers)")
                     .GetCompletionValue()
                     .ToObject();
 
             if (statuses != null)
             {
-                foreach (var status in ((object[])statuses).Cast<string>())
-                {
-                    var document = XDocument.Parse(status);
+                var jsonStatuses = ((object[])statuses).Cast<string>().Select(JObject.Parse);
 
-                    var videoElement = document.Element("MediaContainer").Element("Video");
+                // we're supposed to have only one here, except if one device has more than one valid connection URL, in which case the same device will have replied anyways (and that scenario shouldn't happen anyways because one of the two should fail.)
+                var deviceStatusJson = jsonStatuses.First(o => o["Video"]["Player"]["@attributes"]["machineIdentifier"].Value<string>() == device.ClientIdentifier);
 
-                    // Only videos are supported now.
-                    if (videoElement != null)
-                    {
-                        if (videoElement.Element("Player").Attribute("machineIdentifier").Value == device.ClientIdentifier)
-                        {
-                            // Making a lightweight version right now, because in the future, we expect statuses to return directly a single JSON object.
-                            return new DeviceStatus()
-                                   {
-                                       Video = new Video {
-                                                             Duration = long.Parse(videoElement.Attribute("duration").Value),
-                                                             //ViewOffset = long.Parse(videoElement.Attribute("viewOffset").Value),
-                                                             Title = videoElement.Attribute("title").Value,
-                                                             Summary = videoElement.Attribute("summary").Value,
-                                                             GrandParentTitle = videoElement.Attribute("grandparentTitle").Value,
-                                                             Thumb = videoElement.Attribute("thumb").Value
-                                                         },
-                                       Player = new Player {
-                                                               Title = videoElement.Element("Player").Attribute("title").Value,
-                                                               MachineIdentifier = videoElement.Element("Player").Attribute("machineIdentifier").Value,
-                                                               Platform = videoElement.Element("Player").Attribute("platform").Value,
-                                                               Product = videoElement.Element("Player").Attribute("product").Value,
-                                                               State = videoElement.Element("Player").Attribute("state").Value
-                                                           }
-                                   };
-                        }
-                    }
-                }
+                var deviceStatus = new DeviceStatus();
+
+                deviceStatus.Video = deviceStatusJson["Video"]["@attributes"].ToObject<Video>();
+                deviceStatus.Video.Player = deviceStatusJson["Video"]["Player"]["@attributes"].ToObject<Player>();
+                return deviceStatus;
             }
 
             return null;
@@ -81,23 +56,20 @@ namespace SandboxConsole.Services
             scripts
                 .SetValue("device", device)
                 .Execute("play_jint(device)");
-               
         }
 
         public void SkipNext(PlexDevice device)
         {
             scripts
                 .SetValue("device", device)
-                .Execute("skipNext_jint(device)");           
+                .Execute("skipNext_jint(device)");
         }
 
         public void SkipPrevious(PlexDevice device)
         {
             scripts
                 .SetValue("device", device)
-                .Execute("skipPrevious_jint(device)");                 
+                .Execute("skipPrevious_jint(device)");
         }
     }
-
-
 }
