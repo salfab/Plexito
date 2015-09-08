@@ -32,12 +32,30 @@ namespace SandboxConsole.Services
                 var jsonStatuses = ((object[])statuses).Cast<string>().Select(JObject.Parse);
 
                 // we're supposed to have only one here, except if one device has more than one valid connection URL, in which case the same device will have replied anyways (and that scenario shouldn't happen anyways because one of the two should fail.)
-                var deviceStatusJson = jsonStatuses.First(o => o["Video"]["Player"]["@attributes"]["machineIdentifier"].Value<string>() == device.ClientIdentifier);
+                var deviceStatusJson = jsonStatuses.First(o =>
+                {
+                    var jToken = o["Video"] ?? (o["Photo"] ?? o["Track"]);
+                    return jToken["Player"]["@attributes"]["machineIdentifier"].Value<string>() == device.ClientIdentifier;
+                });
 
                 var deviceStatus = new DeviceStatus();
 
-                deviceStatus.Video = deviceStatusJson["Video"]["@attributes"].ToObject<Video>();
-                deviceStatus.Video.Player = deviceStatusJson["Video"]["Player"]["@attributes"].ToObject<Player>();
+                if (deviceStatusJson["Video"] != null)
+                {
+                    deviceStatus.Video = deviceStatusJson["Video"]["@attributes"].ToObject<Video>();
+                    deviceStatus.Video.Player = deviceStatusJson["Video"]["Player"]["@attributes"].ToObject<Player>();
+                }
+                else if (deviceStatusJson["Photo"] != null)
+                {
+                    deviceStatus.Photo = deviceStatusJson["Photo"]["@attributes"].ToObject<Photo>();
+                    deviceStatus.Photo.Player = deviceStatusJson["Photo"]["Player"]["@attributes"].ToObject<Player>();
+                }
+                else if (deviceStatusJson["Track"] != null)
+                {
+                    deviceStatus.Track = deviceStatusJson["Track"]["@attributes"].ToObject<Track>();
+                    deviceStatus.Track.Player = deviceStatusJson["Track"]["Player"]["@attributes"].ToObject<Player>();
+                }
+
                 return deviceStatus;
             }
 

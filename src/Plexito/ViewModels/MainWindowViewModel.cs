@@ -36,8 +36,21 @@ namespace Plexito.ViewModels
             var status = _api.PlayBack.GetStatus(_player, _servers);
             if (status != null)
             {
-                this.Title = status.Video.Title;
-                this.Parent = status.Video.GrandParentTitle;
+                if (status.Video != null)
+                {
+                    this.Title = status.Video.Title;
+                    this.Parent = status.Video.GrandParentTitle;
+                }
+                else if (status.Photo != null)
+                {
+                    this.Title = status.Photo.Title;
+                    this.Parent = status.Photo.OriginallyAvailableAt;
+                }
+                else if (status.Track != null)
+                {
+                    this.Title = "status.Track.Title";
+                    this.Parent = "status.Track.Artist - status.Track.Album";
+                }
             }
             else
             {
