@@ -77,10 +77,10 @@ namespace Plexito.ViewModels
                 }
                 else if (status.Track != null)
                 {
-                    this.Title = "status.Track.Title";
-                    this.Parent = "status.Track.Artist - status.Track.Album";
+                    this.Title = status.Track.Title;
+                    this.Parent = status.Track.ParentTitle +" - " + status.Track.GrandParentTitle;
                     // We don't support if there's more than one server.
-                    //this.ThumbnailLocation = _player.ConnectionUris.First().TrimEnd('/') + status.Track.Thumb;
+                    this.ThumbnailLocation = plexServer.ConnectionUris.First(s => !s.Contains(plexServer.PublicAddress)).TrimEnd('/') + status.Track.Thumb;
                 }
             }
             else
