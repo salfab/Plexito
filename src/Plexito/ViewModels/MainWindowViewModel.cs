@@ -20,6 +20,8 @@ namespace Plexito.ViewModels
         private IEnumerable<PlexDevice> _servers;
         private PlexDevice _player;
 
+        private string thumbnailLocation;
+
         public MainWindowViewModel()
         {
             // We should use a service locator or an IoC container, just to make sure we are using the same instance of PlexBinding throughout the app.
@@ -27,9 +29,10 @@ namespace Plexito.ViewModels
             var devices = _api.GetDevices();
             _player = devices[ConfigurationManager.AppSettings["playerName"]];
             _servers = devices.Values.Where(d => d.Provides.Contains("server"));
-            playerStateUpdateTimer = new Timer(UpdatePlayerState, null, 0, 1000);
+            playerStateUpdateTimer = new Timer(UpdatePlayerState, null, 0, 10000);
             Title = "Title";
             Parent = "Parent";
+            ThumbnailLocation = "http://siliconangle.com/wp-content/plugins/special-recent-posts-pro/images/no-thumb.png";
 
             SkipNextCommand = new DelegateCommand(OnSkipNext);
             SkipPreviousCommand = new DelegateCommand(OnSkipPrevious);
@@ -57,26 +60,47 @@ namespace Plexito.ViewModels
             var status = _api.PlayBack.GetStatus(_player, _servers);
             if (status != null)
             {
+                var plexServer = this._servers.Single();
                 if (status.Video != null)
                 {
                     this.Title = status.Video.Title;
                     this.Parent = status.Video.GrandParentTitle;
+                    // We don't support if there's more than one server.
+                    this.ThumbnailLocation = plexServer.ConnectionUris.First(s => !s.Contains(plexServer.PublicAddress)).TrimEnd('/') + status.Video.Thumb;
                 }
                 else if (status.Photo != null)
                 {
                     this.Title = status.Photo.Title;
                     this.Parent = status.Photo.OriginallyAvailableAt;
+                    // We don't support if there's more than one server.
+                    this.ThumbnailLocation = plexServer.ConnectionUris.First(s => !s.Contains(plexServer.PublicAddress)).TrimEnd('/') + status.Photo.Thumb;
                 }
                 else if (status.Track != null)
                 {
                     this.Title = "status.Track.Title";
                     this.Parent = "status.Track.Artist - status.Track.Album";
+                    // We don't support if there's more than one server.
+                    //this.ThumbnailLocation = _player.ConnectionUris.First().TrimEnd('/') + status.Track.Thumb;
                 }
             }
             else
             {
                 this.Title = string.Empty;
                 this.Parent = string.Empty;
+            }
+        }
+
+        public string ThumbnailLocation
+        {
+            get
+            {
+                return this.thumbnailLocation;
+            }
+            set
+            {
+                if (value == this.thumbnailLocation) return;
+                this.thumbnailLocation = value;
+                OnPropertyChanged();
             }
         }
 

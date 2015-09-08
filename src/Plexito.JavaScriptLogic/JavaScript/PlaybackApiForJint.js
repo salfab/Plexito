@@ -56,7 +56,12 @@ function GetStatusJson_jint(device, plexServers) {
         var xmlDoc = new REXMLLite(statusItems[index]);
         var json = xmlToJson(xmlDoc.rootElement.childElements[0]);
         var deviceToQuery = device.ClientIdentifier;
-        if (json.Photo.Player['@attributes'].machineIdentifier === deviceToQuery) {
+        var playerParent = json.Video;
+        if (playerParent == null)
+            playerParent = json.Track;
+        if (playerParent == null)
+            playerParent = json.Photo;        
+        if (playerParent.Player['@attributes'].machineIdentifier === deviceToQuery) {           
             return JSON.stringify(json);
         }
     }

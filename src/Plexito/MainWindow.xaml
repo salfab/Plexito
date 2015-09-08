@@ -27,6 +27,6 @@
             <Button FontFamily="Segoe UI Symbol" Content="" Command="{Binding PauseCommand}" />
             <Button FontFamily="Segoe UI Symbol" Content="" Command="{Binding SkipNextCommand}" />
         </StackPanel>
-        <Image Grid.RowSpan="3" Grid.Column="1"></Image>
+        <Image Grid.RowSpan="3" Grid.Column="1" Source="{Binding ThumbnailLocation}"></Image>
     </Grid>
 </Window>
