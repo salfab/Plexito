@@ -6,3 +6,5 @@ src/Plexito.JavaScriptLogic/obj
 **/*.suo
 src/Plexito/obj
 src/Plexito/bin
+src/Plexito.Core/bin
+src/Plexito.Core/obj

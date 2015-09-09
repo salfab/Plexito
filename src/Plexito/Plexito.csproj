@@ -119,13 +119,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SandboxConsole\SandboxConsole.csproj">
-      <Project>{3F3AC32E-24D7-4AFD-992A-56A23FF004D8}</Project>
-      <Name>SandboxConsole</Name>
-    </ProjectReference>
+    <Resource Include="licences.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="licences.txt" />
+    <ProjectReference Include="..\Plexito.Core\Plexito.Core.csproj">
+      <Project>{29f76262-82ee-4a9e-b51c-81bc94b12732}</Project>
+      <Name>Plexito.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
