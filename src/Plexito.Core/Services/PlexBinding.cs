@@ -16,6 +16,7 @@ namespace SandboxConsole.Services
 
     public class PlexBinding
     {
+        // Would have been much nicer with Dependency Injection, instead of a singleton PlexBinding, but then, we couldn't have instantiated the ViewModel from the XAML.
         public static Lazy<PlexBinding> Instance { get; set; }
 
         private readonly string _username;
