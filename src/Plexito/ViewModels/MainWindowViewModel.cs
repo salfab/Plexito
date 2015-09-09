@@ -11,12 +11,16 @@ using System.Threading;
 
 namespace Plexito.ViewModels
 {
+    using System.Reactive.Concurrency;
+
+    using Plexito.RX;
+
     public class MainWindowViewModel : INotifyPropertyChanged
     {
         private string _parent;
         private string _title;
         private PlexBinding _api;
-        private Timer playerStateUpdateTimer;
+        private IDisposable schedule;
         private IEnumerable<PlexDevice> _servers;
         private PlexDevice _player;
 
@@ -29,7 +33,10 @@ namespace Plexito.ViewModels
             var devices = _api.GetDevices();
             _player = devices[ConfigurationManager.AppSettings["playerName"]];
             _servers = devices.Values.Where(d => d.Provides.Contains("server"));
-            playerStateUpdateTimer = new Timer(UpdatePlayerState, null, 0, 10000);
+
+            // Let's make it sexier with RX and avoid overrunning Timer initiated tasks: http://www.zerobugbuild.com/?p=259 (because here, it DOES matter !)
+            this.schedule = Scheduler.Default.ScheduleRecurringAction(TimeSpan.FromSeconds(1), this.UpdatePlayerState);
+
             Title = "Title";
             Parent = "Parent";
             ThumbnailLocation = "http://siliconangle.com/wp-content/plugins/special-recent-posts-pro/images/no-thumb.png";
@@ -55,7 +62,7 @@ namespace Plexito.ViewModels
             _api.PlayBack.SkipNext(_player);
         }
 
-        private void UpdatePlayerState(object state)
+        private void UpdatePlayerState()
         {
             var status = _api.PlayBack.GetStatus(_player, _servers);
             if (status != null)
