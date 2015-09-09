@@ -61,7 +61,7 @@ function GetStatusJson_jint(device, plexServers) {
             playerParent = json.Track;
         if (playerParent == null)
             playerParent = json.Photo;        
-        if (playerParent.Player['@attributes'].machineIdentifier === deviceToQuery) {           
+        if (playerParent != null && playerParent.Player['@attributes'].machineIdentifier === deviceToQuery) {           
             return JSON.stringify(json);
         }
     }
