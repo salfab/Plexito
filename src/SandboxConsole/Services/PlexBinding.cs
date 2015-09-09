@@ -9,8 +9,13 @@ using System.Security;
 
 namespace SandboxConsole.Services
 {
+    using System;
+    using System.Configuration;
+
     public class PlexBinding
     {
+        public static Lazy<PlexBinding> Instance { get; set; }
+
         private readonly string _username;
         private readonly string _password;
         private Engine _scripts;
@@ -107,7 +112,12 @@ namespace SandboxConsole.Services
             _username = username;
             _password = password;
             this.PlayBack = new PlaybackApiBinding(Plexito.JavaScriptLogic.Scripts.PlaybackApi);
-            _scripts = new Engine(cfg => cfg.AllowClr(typeof(XMLHttpRequest).Assembly)).Execute(Plexito.JavaScriptLogic.Scripts.PlexApi);
+            _scripts = new Engine(cfg => cfg.AllowClr(typeof(XMLHttpRequest).Assembly)).Execute(Plexito.JavaScriptLogic.Scripts.PlexApi);            
+        }
+
+        static PlexBinding()
+        {
+            Instance = new Lazy<PlexBinding>(() => new PlexBinding(ConfigurationManager.AppSettings["username"], ConfigurationManager.AppSettings["password"]));            
         }
     }
 }

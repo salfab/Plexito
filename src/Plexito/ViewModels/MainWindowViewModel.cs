@@ -29,7 +29,7 @@ namespace Plexito.ViewModels
         public MainWindowViewModel()
         {
             // We should use a service locator or an IoC container, just to make sure we are using the same instance of PlexBinding throughout the app.
-            _api = new PlexBinding(ConfigurationManager.AppSettings["username"], ConfigurationManager.AppSettings["password"]);
+            _api = PlexBinding.Instance.Value;
             var devices = _api.GetDevices();
             _player = devices[ConfigurationManager.AppSettings["playerName"]];
             _servers = devices.Values.Where(d => d.Provides.Contains("server"));

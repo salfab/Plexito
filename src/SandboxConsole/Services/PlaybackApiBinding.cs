@@ -2,11 +2,14 @@ using Newtonsoft.Json.Linq;
 
 namespace SandboxConsole.Services
 {
+    using System;
+
     using Jint;
     using Plexito.JavaScriptLogic.Stubs;
     using SandboxConsole.Model;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
     using System.Xml.Linq;
 
     public class PlaybackApiBinding
@@ -20,12 +23,23 @@ namespace SandboxConsole.Services
 
         public DeviceStatus GetStatus(PlexDevice device, IEnumerable<PlexDevice> plexServers)
         {
-            var status =
-                this.scripts.SetValue("device", device)
-                    .SetValue("plexServers", plexServers.ToArray())
-                    .Execute("GetStatusJson_jint(device, plexServers)")
-                    .GetCompletionValue()
-                    .ToObject();
+            object gate = PlexBinding.Instance.Value;
+            object status = null;
+            if (Monitor.TryEnter(gate))
+            {
+                try
+                {
+                    status = this.scripts.SetValue("device", device)
+                        .SetValue("plexServers", plexServers.ToArray())
+                        .Execute("GetStatusJson_jint(device, plexServers)")
+                        .GetCompletionValue()
+                        .ToObject();
+                }
+                finally
+                {
+                    Monitor.Exit(gate);
+                }
+            }
 
             if (status != null)
             {
@@ -88,30 +102,80 @@ namespace SandboxConsole.Services
 
         public void Pause(PlexDevice device)
         {
-            scripts
-                .SetValue("device", device)
-                .Execute("pause_jint(device)");
+            var gate = PlexBinding.Instance.Value;
+            if (Monitor.TryEnter(gate))
+            {
+                try
+                {
+                    // do some work
+                    scripts
+                        .SetValue("device", device)
+                        .Execute("pause_jint(device)");
+                }
+                finally
+                {
+                    Monitor.Exit(gate);
+                }
+            }
+
         }
 
         public void Resume(PlexDevice device)
         {
-            scripts
-                .SetValue("device", device)
-                .Execute("play_jint(device)");
+            object gate = PlexBinding.Instance.Value;
+            if (Monitor.TryEnter(gate))
+            {
+                try
+                {
+                    // do some work
+                    this.scripts
+                        .SetValue("device", device)
+                        .Execute("play_jint(device)");
+                }
+                finally
+                {
+                    Monitor.Exit(gate);
+                }
+            }
+
         }
 
         public void SkipNext(PlexDevice device)
         {
-            scripts
-                .SetValue("device", device)
-                .Execute("skipNext_jint(device)");
+            object gate = PlexBinding.Instance.Value;
+            if (Monitor.TryEnter(gate))
+            {
+                try
+                {
+                    // do some work
+                    scripts
+                        .SetValue("device", device)
+                        .Execute("skipNext_jint(device)");
+                }
+                finally
+                {
+                    Monitor.Exit(gate);
+                }
+            }
         }
 
         public void SkipPrevious(PlexDevice device)
         {
-            scripts
-                .SetValue("device", device)
-                .Execute("skipPrevious_jint(device)");
+            object gate = PlexBinding.Instance.Value;
+            if (Monitor.TryEnter(gate))
+            {
+                try
+                {
+                    // do some work
+                    scripts
+                        .SetValue("device", device)
+                        .Execute("skipPrevious_jint(device)");
+                }
+                finally
+                {
+                    Monitor.Exit(gate);
+                }
+            }
         }
     }
 }
