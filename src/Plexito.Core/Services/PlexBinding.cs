@@ -8,11 +8,10 @@ using System.Security;
 
 namespace SandboxConsole.Services
 {
-    using System;
-    using System.Configuration;
-
     using Plexito.JavaScriptLogic;
     using Plexito.JavaScriptLogic.Stubs;
+    using System;
+    using System.Configuration;
 
     public class PlexBinding
     {
@@ -103,7 +102,7 @@ namespace SandboxConsole.Services
             //}
             foreach (var device in devicesJObject.Where(device => device.Name != string.Empty))
             {
-                devices.Add(device.Name, device);
+                devices.Add(device.Id, device);
             }
             return new ReadOnlyDictionary<string, PlexDevice>(devices);
         }
@@ -115,12 +114,12 @@ namespace SandboxConsole.Services
             _username = username;
             _password = password;
             this.PlayBack = new PlaybackApiBinding(Scripts.PlaybackApi);
-            _scripts = new Engine(cfg => cfg.AllowClr(typeof(XMLHttpRequest).Assembly)).Execute(Plexito.JavaScriptLogic.Scripts.PlexApi);            
+            _scripts = new Engine(cfg => cfg.AllowClr(typeof(XMLHttpRequest).Assembly)).Execute(Plexito.JavaScriptLogic.Scripts.PlexApi);
         }
 
         static PlexBinding()
         {
-            Instance = new Lazy<PlexBinding>(() => new PlexBinding(ConfigurationManager.AppSettings["username"], ConfigurationManager.AppSettings["password"]));            
+            Instance = new Lazy<PlexBinding>(() => new PlexBinding(ConfigurationManager.AppSettings["username"], ConfigurationManager.AppSettings["password"]));
         }
     }
 }

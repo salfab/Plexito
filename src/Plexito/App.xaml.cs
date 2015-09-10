@@ -22,7 +22,7 @@ namespace Plexito
         public App()
         {
             var plexApi = PlexBinding.Instance.Value;
-            var device = plexApi.GetDevices()[ConfigurationManager.AppSettings["playerName"]];
+            var device = plexApi.GetDevices()[ConfigurationManager.AppSettings["playerId"]];
             this.plexMediaKeysProxy = new PlexMediaKeysProxy(plexApi);
             this.plexMediaKeysProxy.SetDevice(device);
             this.plexMediaKeysProxy.Start();

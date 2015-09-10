@@ -11,9 +11,8 @@ using System.Threading;
 
 namespace Plexito.ViewModels
 {
-    using System.Reactive.Concurrency;
-
     using Plexito.RX;
+    using System.Reactive.Concurrency;
 
     public class MainWindowViewModel : INotifyPropertyChanged
     {
@@ -31,7 +30,7 @@ namespace Plexito.ViewModels
             // We should use a service locator or an IoC container, just to make sure we are using the same instance of PlexBinding throughout the app.
             _api = PlexBinding.Instance.Value;
             var devices = _api.GetDevices();
-            _player = devices[ConfigurationManager.AppSettings["playerName"]];
+            _player = devices[ConfigurationManager.AppSettings["playerId"]];
             _servers = devices.Values.Where(d => d.Provides.Contains("server"));
 
             // Let's make it sexier with RX and avoid overrunning Timer initiated tasks: http://www.zerobugbuild.com/?p=259 (because here, it DOES matter !)
@@ -85,7 +84,7 @@ namespace Plexito.ViewModels
                 else if (status.Track != null)
                 {
                     this.Title = status.Track.Title;
-                    this.Parent = status.Track.ParentTitle +" - " + status.Track.GrandParentTitle;
+                    this.Parent = status.Track.ParentTitle + " - " + status.Track.GrandParentTitle;
                     // We don't support if there's more than one server.
                     this.ThumbnailLocation = plexServer.ConnectionUris.First(s => !s.Contains(plexServer.PublicAddress)).TrimEnd('/') + status.Track.Thumb;
                 }
