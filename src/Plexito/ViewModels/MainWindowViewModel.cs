@@ -67,26 +67,27 @@ namespace Plexito.ViewModels
             if (status != null)
             {
                 var plexServer = this._servers.Single();
+                var publicAddress = plexServer.PublicAddress;
                 if (status.Video != null)
                 {
                     this.Title = status.Video.Title;
                     this.Parent = status.Video.GrandParentTitle;
                     // We don't support if there's more than one server.
-                    this.ThumbnailLocation = plexServer.ConnectionUris.First(s => !s.Contains(plexServer.PublicAddress)).TrimEnd('/') + status.Video.Thumb;
+                    this.ThumbnailLocation = plexServer.ConnectionUris.First(s => IsAddressInLan(s, publicAddress)).TrimEnd('/') + status.Video.Thumb;
                 }
                 else if (status.Photo != null)
                 {
                     this.Title = status.Photo.Title;
                     this.Parent = status.Photo.OriginallyAvailableAt;
                     // We don't support if there's more than one server.
-                    this.ThumbnailLocation = plexServer.ConnectionUris.First(s => !s.Contains(plexServer.PublicAddress)).TrimEnd('/') + status.Photo.Thumb;
+                    this.ThumbnailLocation = plexServer.ConnectionUris.First(s => IsAddressInLan(s, publicAddress)).TrimEnd('/') + status.Photo.Thumb;
                 }
                 else if (status.Track != null)
                 {
                     this.Title = status.Track.Title;
                     this.Parent = status.Track.ParentTitle + " - " + status.Track.GrandParentTitle;
                     // We don't support if there's more than one server.
-                    this.ThumbnailLocation = plexServer.ConnectionUris.First(s => !s.Contains(plexServer.PublicAddress)).TrimEnd('/') + status.Track.Thumb;
+                    this.ThumbnailLocation = plexServer.ConnectionUris.First(s => IsAddressInLan(s, publicAddress)).TrimEnd('/') + status.Track.Thumb;
                 }
             }
             else
@@ -94,6 +95,11 @@ namespace Plexito.ViewModels
                 this.Title = string.Empty;
                 this.Parent = string.Empty;
             }
+        }
+
+        private bool IsAddressInLan(string s, string publicAddress)
+        {
+            return s != "http://:0" && !s.Contains(publicAddress);
         }
 
         public string ThumbnailLocation
