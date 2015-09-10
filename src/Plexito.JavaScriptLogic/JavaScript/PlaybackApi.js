@@ -42,11 +42,16 @@ function GetStatuses(plexServers, xhr) {
         for (cindex = 0; cindex < plexServers[index].ConnectionUris.length; cindex++) {
             var connectionUri = plexServers[index].ConnectionUris[cindex];
             if (connectionUri != null) {
-                xhr.open("GET", connectionUri + "/status/sessions", false);
-                xhr.setRequestHeader("Content-Type", "text/xml");
-                xhr.send();
-                if (xhr.status === 200) {
-                    xmlItems.push(xhr.responseXML);
+                try {
+                    xhr.open("GET", connectionUri + "/status/sessions", false);
+                    xhr.setRequestHeader("Content-Type", "text/xml");
+                    xhr.send();
+                    if (xhr.status === 200) {
+                        xmlItems.push(xhr.responseXML);
+                    }
+                }
+                catch (e) {
+                    // the call didn't go through. maybe a malformed connection URI such as http://:0/status/sessions
                 }
             }
         }
