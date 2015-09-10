@@ -10,10 +10,10 @@
     <Window.DataContext>
         <local:MainWindowViewModel />
     </Window.DataContext>
-    <Grid>
+    <Grid Margin="2">
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
-            <ColumnDefinition Width="80" />
+            <ColumnDefinition Width="66" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
@@ -27,6 +27,6 @@
             <Button FontFamily="Segoe UI Symbol" Content="" Command="{Binding PauseCommand}" />
             <Button FontFamily="Segoe UI Symbol" Content="" Command="{Binding SkipNextCommand}" />
         </StackPanel>
-        <Image Grid.RowSpan="3" Grid.Column="1" Source="{Binding ThumbnailLocation}"></Image>
+        <Image Grid.RowSpan="3" Grid.Column="1" Source="{Binding ThumbnailLocation}" />
     </Grid>
 </Window>
